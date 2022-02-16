@@ -25,9 +25,9 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Post $post)
     {
-        //
+        return view("admin.posts.create");
     }
 
     /**
@@ -38,7 +38,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request ->all();
+        dd($data);
     }
 
     /**

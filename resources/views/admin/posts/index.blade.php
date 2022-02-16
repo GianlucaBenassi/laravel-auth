@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="container">
+
+        <h1 class="text-center mt-3">Posts list</h1>
+        <a href="{{route('posts.create')}}"><button type="button" class="btn btn-success">Add post</button></a>
+
         @foreach ($posts as $post)
             
             <div class="card my-5">
