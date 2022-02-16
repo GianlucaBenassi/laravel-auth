@@ -23,7 +23,7 @@
             {{-- post published --}}
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="published" name="published">
-                <label class="form-check-label" for="published">Public</label>
+                <label class="form-check-label" for="published">Publish</label>
             </div>
 
             {{-- submit button --}}

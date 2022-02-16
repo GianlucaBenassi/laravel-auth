@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Post;
 
 class PostController extends Controller
@@ -38,8 +39,36 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // validation
+        $request->validate([
+            "title" => "required|string|max:100",
+            "content" => "required|string",
+            "published" => "sometimes|accepted"
+        ]);
+
+        // add post
         $data = $request ->all();
-        dd($data);
+        
+        $newPost = new Post();
+        $newPost->title = $data["title"];
+        $newPost->content = $data["content"];
+
+        isset($data["published"]) ? $newPost->published = true : $newPost->published = false;
+
+        $slug = Str::of($newPost->title)->slug("-");
+        $counter = 1;
+
+        while (Post::where("slug", $slug)->first()) {
+            $slug = Str::of($newPost->title)->slug("-")."-{$counter}";
+            $counter++;
+        }
+
+        $newPost->slug = $slug;
+        $newPost->save();
+
+        // redirect
+
+        return redirect()->route("posts.show", $newPost->id);
     }
 
     /**
