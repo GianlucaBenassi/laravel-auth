@@ -16,7 +16,11 @@
 
         <a href="{{route('posts.index')}}"><button type="button" class="btn btn-dark">Posts list</button></a>
         <a href="{{route('posts.edit', $post->id)}}"><button type="button" class="btn btn-primary">Edit</button></a>
-        <a href="#"><button type="button" class="btn btn-danger">Delete</button></a>
+        <form action="{{route('posts.destroy', $post->id)}}" method="POST" class="d-inline-block">
+            @csrf
+            @method('DELETE')
+            <input type="submit" class="btn btn-danger" value="Delete">
+        </form>
         
     </div>
 @endsection

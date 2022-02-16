@@ -21,7 +21,11 @@
                 <div class="card-footer d-flex">
                     <a href="{{route('posts.show', $post->id)}}"><button type="button" class="btn btn-info">Info</button></a>
                     <a href="{{route('posts.edit', $post->id)}}" class=ml-2><button type="button" class="btn btn-primary">Edit</button></a>
-                    <a href="#" class="ml-auto"><button type="button" class="btn btn-danger">Delete</button></a>
+                    <form action="{{route('posts.destroy', $post->id)}}" method="POST" class="ml-auto">
+                        @csrf
+                        @method('DELETE')
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </form>
                 </div>
             </div>
 
