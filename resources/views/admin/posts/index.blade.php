@@ -7,7 +7,11 @@
             <div class="card my-5">
                 <div class="card-body">
                     <h3 class="card-title">{{$post->title}}</h3>
-                    <span class="d-block">Published: {{$post->published == 0 ? "No" : "Yes"}}</span>
+                    @if ($post->published == 0)
+                        <span class="badge badge-secondary">Draft</span>
+                    @else
+                        <span class="badge badge-success">Published</span>
+                    @endif
                     <span class="d-block">Created: {{$post->created_at}}</span>
                 </div>
                 <div class="card-footer d-flex">
