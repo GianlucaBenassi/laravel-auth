@@ -9,6 +9,11 @@ use App\Post;
 
 class PostController extends Controller
 {
+    protected $validationRule = [
+        "title" => "required|string|max:100",
+        "content" => "required|string",
+        "published" => "sometimes|accepted"
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -40,11 +45,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         // validation
-        $request->validate([
-            "title" => "required|string|max:100",
-            "content" => "required|string",
-            "published" => "sometimes|accepted"
-        ]);
+        $request->validate($this->validationRule);
 
         // add post
         $data = $request ->all();
@@ -52,8 +53,7 @@ class PostController extends Controller
         $newPost = new Post();
         $newPost->title = $data["title"];
         $newPost->content = $data["content"];
-
-        isset($data["published"]) ? $newPost->published = true : $newPost->published = false;
+        $newPost->published = isset($data["published"]);
 
         $slug = Str::of($newPost->title)->slug("-");
         $counter = 1;
@@ -67,8 +67,8 @@ class PostController extends Controller
         $newPost->save();
 
         // redirect
-
         return redirect()->route("posts.show", $newPost->id);
+
     }
 
     /**
@@ -88,9 +88,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view("admin.posts.edit", compact("post"));
     }
 
     /**
@@ -100,9 +100,36 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        // validation
+        $request->validate($this->validationRule);
+
+        // post update
+        $data = $request->all();
+
+        if ($post->title != $data["title"]) {
+            $post->title = $data["title"];
+
+            $slug = Str::of($post->title)->slug("-");
+            $counter = 1;
+
+            while (Post::where("slug", $slug)->first()) {
+                $slug = Str::of($post->title)->slug("-")."-{$counter}";
+                $counter++;
+            }
+
+            $post->slug = $slug;
+
+            $post->content = $data["content"];
+            $post->published = isset($data["published"]);
+            $post->save();
+
+            // redirect
+            return redirect()->route("posts.show", $post->id);
+
+        }
+
     }
 
     /**

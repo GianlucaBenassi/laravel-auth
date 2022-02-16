@@ -15,7 +15,7 @@
         <span class="d-block mb-5"><strong>Created:</strong> {{$post->created_at}}</span>
 
         <a href="{{route('posts.index')}}"><button type="button" class="btn btn-dark">Posts list</button></a>
-        <a href="#"><button type="button" class="btn btn-primary">Edit</button></a>
+        <a href="{{route('posts.edit', $post->id)}}"><button type="button" class="btn btn-primary">Edit</button></a>
         <a href="#"><button type="button" class="btn btn-danger">Delete</button></a>
         
     </div>
